@@ -28,6 +28,10 @@
       --fb:'DM Sans',sans-serif;
       --e:cubic-bezier(.25,.46,.45,.94);
       --sp:cubic-bezier(.34,1.56,.64,1);
+      /* timing constants — single source of truth */
+      --t-fast:.2s;
+      --t-base:.4s;
+      --t-slow:.5s;
     }
 
     html,body{
@@ -36,6 +40,13 @@
       font-family:var(--fb);overflow:hidden;
       -webkit-tap-highlight-color:transparent;
       user-select:none;
+    }
+
+    /* Keyboard focus indicator */
+    :focus-visible{
+      outline:2px solid var(--c);
+      outline-offset:3px;
+      border-radius:4px;
     }
 
     /* atmosphere */
@@ -77,7 +88,7 @@
     .tnum{
       font-family:var(--fd);font-size:13px;font-weight:700;
       letter-spacing:.08em;color:var(--c);
-      min-width:36px;text-align:right;transition:color .4s;
+      min-width:36px;text-align:right;transition:color var(--t-base);
     }
     .tnum.w{color:var(--amb);}
     .tring{width:30px;height:30px;transform:rotate(-90deg);}
@@ -85,15 +96,15 @@
     .tring .bg{stroke:var(--tx1);}
     .tring .pr{
       stroke:var(--c);
-      stroke-dasharray:75.4;stroke-dashoffset:0;
-      transition:stroke-dashoffset 1s linear,stroke .4s;
+      stroke-dasharray:75.3982;stroke-dashoffset:0;
+      transition:stroke-dashoffset 1s linear,stroke var(--t-base);
     }
     .tring.w .pr{stroke:var(--amb);}
     .bsm{
       font-family:var(--fb);font-size:11px;font-weight:400;
       letter-spacing:.05em;padding:6px 14px;border-radius:100px;
       border:1px solid var(--bd);background:var(--s0);
-      color:var(--tx6);cursor:pointer;transition:all .2s;
+      color:var(--tx6);cursor:pointer;transition:all var(--t-fast);
     }
     .bsm:hover{border-color:var(--tx3);color:var(--tx);}
     .bsm.on{border-color:var(--c);color:var(--c);background:var(--cdim);}
@@ -107,7 +118,7 @@
       height:100%;width:100%;transform-origin:left;
       background:linear-gradient(90deg,var(--c),rgba(0,212,255,.25));
       transform:scaleX(1);
-      transition:transform 1s linear,background .4s;
+      transition:transform 1s linear,background var(--t-base);
     }
     .tbar-fill.w{background:linear-gradient(90deg,var(--amb),rgba(251,191,36,.25));}
 
@@ -132,7 +143,7 @@
       margin-left:auto;font-family:var(--fb);font-size:10px;
       padding:5px 14px;border-radius:100px;
       border:1px solid var(--bd);background:transparent;
-      color:var(--tx3);cursor:pointer;transition:all .2s;
+      color:var(--tx3);cursor:pointer;transition:all var(--t-fast);
     }
     .bres:hover{border-color:var(--tx3);color:var(--tx6);}
 
@@ -144,7 +155,7 @@
       display:flex;flex-direction:column;
       opacity:0;transform:translateX(32px);
       pointer-events:none;
-      transition:opacity .4s var(--e),transform .4s var(--e);
+      transition:opacity var(--t-base) var(--e),transform var(--t-base) var(--e);
       overflow-y:auto;overflow-x:hidden;
     }
     .screen.active{opacity:1;transform:none;pointer-events:all;}
@@ -156,8 +167,8 @@
     .screen.active .fa.a1{transition:all .45s var(--e) .06s;}
     .screen.active .fa.a2{transition:all .47s var(--e) .12s;}
     .screen.active .fa.a3{transition:all .48s var(--e) .18s;}
-    .screen.active .fa.a4{transition:all .50s var(--e) .24s;}
-    .screen.active .fa.a5{transition:all .50s var(--e) .30s;}
+    .screen.active .fa.a4{transition:all var(--t-slow) var(--e) .24s;}
+    .screen.active .fa.a5{transition:all var(--t-slow) var(--e) .30s;}
 
     /* ── WATERMARK ── */
     .wm{
@@ -217,8 +228,8 @@
       display:inline-flex;align-items:center;gap:8px;
       padding:13px 26px;border-radius:100px;
       font-family:var(--fd);font-size:12px;font-weight:700;
-      letter-spacing:.06em;cursor:pointer;
-      transition:all .2s var(--e);
+      letter-spacing:.06em;cursor:pointer;border:none;
+      transition:all var(--t-fast) var(--e);
     }
     .bn:active{transform:scale(.96);}
     .bnp{
@@ -243,7 +254,7 @@
       border-radius:14px;padding:20px 14px;
       text-align:center;cursor:pointer;
       position:relative;overflow:hidden;
-      transition:border-color .2s,box-shadow .2s;
+      transition:border-color var(--t-fast),box-shadow var(--t-fast);
       transform-style:preserve-3d;
       will-change:transform;
     }
@@ -273,7 +284,7 @@
       background:var(--s0);border:1px solid var(--bd);
       border-radius:14px;overflow:hidden;
       max-height:0;opacity:0;
-      transition:max-height .5s var(--e),opacity .4s var(--e);
+      transition:max-height .5s var(--e),opacity var(--t-base) var(--e);
       position:relative;margin-top:10px;
     }
     .pdetail::before{
@@ -312,7 +323,7 @@
       color:var(--tx);line-height:1.6;
       padding-left:20px;position:relative;margin-bottom:12px;
       opacity:0;transform:translateX(-14px);
-      transition:opacity .4s var(--e),transform .4s var(--e);
+      transition:opacity var(--t-base) var(--e),transform var(--t-base) var(--e);
     }
     .blist li::before{content:'›';position:absolute;left:0;color:var(--c);font-size:18px;line-height:1.4;}
     #screen-2.active .blist li:nth-child(1){opacity:1;transform:none;transition-delay:.20s;}
@@ -387,113 +398,120 @@
 
     ::-webkit-scrollbar{width:3px;}
     ::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px;}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:480px){
+      .topbar,.navbar{padding-left:16px;padding-right:16px;}
+      .screen{padding:16px;}
+      .pgrid{grid-template-columns:1fr;gap:8px;}
+    }
   </style>
 </head>
 <body>
 
-<div id="cglow"></div>
+<div id="cglow" aria-hidden="true"></div>
 
 <div id="app">
 
   <!-- TOPBAR -->
-  <div class="topbar">
+  <header class="topbar">
     <div class="logo">Manuel Cosovschi &nbsp;·&nbsp; Pitch 3'</div>
-    <div class="tg">
-      <div class="tnum" id="tNum">3:00</div>
-      <svg class="tring" id="tRing" viewBox="0 0 30 30">
+    <div class="tg" role="timer" aria-label="Temporizador de presentación">
+      <div class="tnum" id="tNum" aria-live="polite" aria-atomic="true">3:00</div>
+      <svg class="tring" id="tRing" viewBox="0 0 30 30" aria-hidden="true">
         <circle class="bg" cx="15" cy="15" r="12"/>
         <circle class="pr" id="tPr" cx="15" cy="15" r="12"/>
       </svg>
-      <button class="bsm" id="tBtn" onclick="toggleTimer()">Iniciar</button>
+      <button class="bsm" id="tBtn" type="button" aria-label="Iniciar temporizador">Iniciar</button>
     </div>
-    <div class="tbar"><div class="tbar-fill" id="tFill"></div></div>
-  </div>
+    <div class="tbar" aria-hidden="true"><div class="tbar-fill" id="tFill"></div></div>
+  </header>
 
   <!-- NAVBAR -->
-  <div class="navbar">
-    <div class="slbl" id="sLbl">Quién soy</div>
-    <div class="dots">
-      <div class="dot on" id="d0" style="width:30px" onclick="go(0)"></div>
-      <div class="dot"   id="d1" style="width:18px" onclick="go(1)"></div>
-      <div class="dot"   id="d2" style="width:18px" onclick="go(2)"></div>
+  <nav class="navbar" aria-label="Navegación de slides">
+    <div class="slbl" id="sLbl" aria-live="polite">Quién soy</div>
+    <div class="dots" role="tablist" aria-label="Slides">
+      <div class="dot on" id="d0" style="width:30px" role="tab" tabindex="0" aria-selected="true"  aria-label="Slide 1: Quién soy"></div>
+      <div class="dot"   id="d1" style="width:18px" role="tab" tabindex="0" aria-selected="false" aria-label="Slide 2: Lo que construí"></div>
+      <div class="dot"   id="d2" style="width:18px" role="tab" tabindex="0" aria-selected="false" aria-label="Slide 3: Por qué NX"></div>
     </div>
-    <button class="bres" onclick="openModal()">Modo Resumen</button>
-  </div>
+    <button class="bres" id="btnResumen" type="button">Modo Resumen</button>
+  </nav>
 
   <!-- CONTENT -->
   <div class="content">
 
     <!-- S1 -->
-    <div class="screen active" id="screen-0">
-      <div class="wm">1</div>
+    <section class="screen active" id="screen-0" role="tabpanel" aria-label="Slide 1: Quién soy">
+      <div class="wm" aria-hidden="true">1</div>
 
       <div class="eyebrow fa a1">Quién soy</div>
 
-      <div class="hero-name fa a2" id="heroName"></div>
+      <h1 class="hero-name fa a2" id="heroName"></h1>
 
-      <div class="rule fa a3"></div>
+      <div class="rule fa a3" aria-hidden="true"></div>
 
-      <div class="hero-idea fa a4">
+      <p class="hero-idea fa a4">
         Desafíos nuevos,<br>cabeza distinta.
-      </div>
+      </p>
 
       <div class="brow fa a5">
-        <button class="bn bnp" onclick="go(1)">
+        <button class="bn bnp" id="btnNext0" type="button">
           Siguiente
-          <svg class="ar" viewBox="0 0 14 14" fill="none">
+          <svg class="ar" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M2 7h10M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
       </div>
-    </div>
+    </section>
 
     <!-- S2 -->
-    <div class="screen" id="screen-1">
-      <div class="wm">2</div>
+    <section class="screen" id="screen-1" role="tabpanel" aria-label="Slide 2: Lo que construí">
+      <div class="wm" aria-hidden="true">2</div>
 
       <div class="eyebrow fa a1">Lo que construí</div>
 
-      <div class="pgrid fa a2">
-        <div class="pcard" id="pA" onclick="pick('canas',event)">
-          <div class="pletter">A</div>
+      <div class="pgrid fa a2" role="list" aria-label="Proyectos">
+        <div class="pcard" id="pA" role="button" tabindex="0" aria-label="Proyecto A: Sistema de Reservas — Full Stack, cliente real">
+          <div class="pletter" aria-hidden="true">A</div>
           <div class="ptitle">Sistema de Reservas</div>
           <div class="psub">Full Stack · Cliente real</div>
         </div>
-        <div class="pcard" id="pB" onclick="pick('bot',event)">
-          <div class="pletter">B</div>
+        <div class="pcard" id="pB" role="button" tabindex="0" aria-label="Proyecto B: Bot WhatsApp — Cloud API, en evolución">
+          <div class="pletter" aria-hidden="true">B</div>
           <div class="ptitle">Bot WhatsApp</div>
           <div class="psub">Cloud API · En evolución</div>
         </div>
-        <div class="pcard" id="pC" onclick="pick('fitnow',event)">
-          <div class="pletter">C</div>
+        <div class="pcard" id="pC" role="button" tabindex="0" aria-label="Proyecto C: FitNow — Tesis, en desarrollo">
+          <div class="pletter" aria-hidden="true">C</div>
           <div class="ptitle">FitNow</div>
           <div class="psub">Tesis · En desarrollo</div>
         </div>
       </div>
 
-      <div class="pdetail" id="pDetail">
+      <div class="pdetail" id="pDetail" aria-live="polite" aria-label="Detalles del proyecto seleccionado">
         <div class="pdin" id="pContent"></div>
       </div>
 
       <div class="brow fa a3">
-        <button class="bn bng" onclick="go(0)">
-          <svg class="ar" viewBox="0 0 14 14" fill="none">
+        <button class="bn bng" id="btnPrev1" type="button">
+          <svg class="ar" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M12 7H2M6 3.5L2.5 7 6 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           Atrás
         </button>
-        <button class="bn bnp" onclick="go(2)">
+        <button class="bn bnp" id="btnNext1" type="button">
           Continuar
-          <svg class="ar" viewBox="0 0 14 14" fill="none">
+          <svg class="ar" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M2 7h10M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
       </div>
-    </div>
+    </section>
 
     <!-- S3 -->
-    <div class="screen" id="screen-2">
-      <div class="wm">3</div>
+    <section class="screen" id="screen-2" role="tabpanel" aria-label="Slide 3: Por qué Naranja X">
+      <div class="wm" aria-hidden="true">3</div>
 
       <div class="eyebrow fa a1">Por qué Naranja X</div>
 
@@ -504,9 +522,9 @@
       </ul>
 
       <div class="ccard fa a3">
-        <div class="cq">¿Qué problema de usuario les gustaría que alguien tome y convierta en una mejora medible?</div>
-        <button class="bconv" id="btnConv" onclick="abrirConv()">
-          <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+        <p class="cq">¿Qué problema de usuario les gustaría que alguien tome y convierta en una mejora medible?</p>
+        <button class="bconv" id="btnConv" type="button">
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none" aria-hidden="true">
             <path d="M9 1.5C4.86 1.5 1.5 4.86 1.5 9c0 1.26.315 2.445.87 3.48L1.5 16.5l4.02-.87A7.5 7.5 0 1 0 9 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
           </svg>
           Abrir conversación
@@ -514,24 +532,24 @@
       </div>
 
       <div class="brow fa a4">
-        <button class="bn bng" onclick="go(1)">
-          <svg class="ar" viewBox="0 0 14 14" fill="none">
+        <button class="bn bng" id="btnPrev2" type="button">
+          <svg class="ar" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M12 7H2M6 3.5L2.5 7 6 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           Atrás
         </button>
       </div>
-    </div>
+    </section>
 
   </div>
 </div>
 
 <!-- MODAL -->
-<div class="overlay" id="overlay" onclick="closeBg(event)">
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal">
     <div class="mhead">
-      <div class="mtitle">Resumen · Manuel Cosovschi</div>
-      <button class="bx" onclick="closeModal()">×</button>
+      <div class="mtitle" id="modalTitle">Resumen · Manuel Cosovschi</div>
+      <button class="bx" id="btnCloseModal" type="button" aria-label="Cerrar resumen">×</button>
     </div>
     <div class="mbody">
       <div class="mb">
@@ -558,166 +576,355 @@
 </div>
 
 <script>
+/* ── CONSTANTS ── */
+const TOTAL = 180;
+const RING_C = 2 * Math.PI * 12; // circumference for r=12
+const LBLS = ['Quién soy', 'Lo que construí', 'Por qué NX'];
+const EXIT_DURATION = 450;
+const TILT_X = 12;
+const TILT_Y = 10;
+
 /* ── DATA ── */
-const DATA={
-  canas:{
-    built:['Front + backend + automatizaciones para alquileres','Validación de disponibilidad, políticas y estadías mínimas'],
-    tradeoff:'Operación ordenada sin generar fricción al usuario.',
-    learning:'Las reglas del negocio son el dominio más complejo de modelar bien.'
+const DATA = {
+  canas: {
+    built: [
+      'Front + backend + automatizaciones para alquileres',
+      'Validación de disponibilidad, políticas y estadías mínimas'
+    ],
+    tradeoff: 'Operación ordenada sin generar fricción al usuario.',
+    learning: 'Las reglas del negocio son el dominio más complejo de modelar bien.'
   },
-  bot:{
-    built:['Flujos con Cloud API: valida fechas, personas, disponibilidad','En evolución — cada caso límite nuevo es una oportunidad de aprender'],
-    tradeoff:'Automatizar sin prometer de más: saber cuándo escalar a un humano.',
-    learning:'Los problemas que aparecen al avanzar son los que más enseñan.'
+  bot: {
+    built: [
+      'Flujos con Cloud API: valida fechas, personas, disponibilidad',
+      'En evolución — cada caso límite nuevo es una oportunidad de aprender'
+    ],
+    tradeoff: 'Automatizar sin prometer de más: saber cuándo escalar a un humano.',
+    learning: 'Los problemas que aparecen al avanzar son los que más enseñan.'
   },
-  fitnow:{
-    built:['App iOS · Node/Express · MySQL · Ridge Regression en Python','Rutas running personalizadas: GPS, telemetría, alertas, recomendaciones'],
-    tradeoff:'Precisión GPS vs batería: prioricé la experiencia en carrera.',
-    learning:'Consumir el modelo desde el cliente sin latencia cambia la UX completamente.'
+  fitnow: {
+    built: [
+      'App iOS · Node/Express · MySQL · Ridge Regression en Python',
+      'Rutas running personalizadas: GPS, telemetría, alertas, recomendaciones'
+    ],
+    tradeoff: 'Precisión GPS vs batería: prioricé la experiencia en carrera.',
+    learning: 'Consumir el modelo desde el cliente sin latencia cambia la UX completamente.'
   }
 };
 
+/* ── DOM CACHE ── */
+const $ = id => document.getElementById(id);
+const dom = {
+  cglow:        $('cglow'),
+  tNum:         $('tNum'),
+  tRing:        $('tRing'),
+  tPr:          $('tPr'),
+  tBtn:         $('tBtn'),
+  tFill:        $('tFill'),
+  sLbl:         $('sLbl'),
+  heroName:     $('heroName'),
+  pDetail:      $('pDetail'),
+  pContent:     $('pContent'),
+  overlay:      $('overlay'),
+  btnConv:      $('btnConv'),
+  btnCloseModal:$('btnCloseModal'),
+  btnResumen:   $('btnResumen'),
+  btnNext0:     $('btnNext0'),
+  btnPrev1:     $('btnPrev1'),
+  btnNext1:     $('btnNext1'),
+  btnPrev2:     $('btnPrev2'),
+  dots:         [0, 1, 2].map(i => $('d' + i)),
+  screens:      [0, 1, 2].map(i => $('screen-' + i)),
+  cards:        { canas: $('pA'), bot: $('pB'), fitnow: $('pC') }
+};
+
+/* ── STATE ── */
+const state = {
+  cur: 0,
+  tLeft: TOTAL,
+  tRun: false,
+  tInt: null
+};
+
 /* ── HERO NAME: char-by-char ── */
-(()=>{
-  const el=document.getElementById('heroName');
-  const lines=['Manuel','Cosovschi'];
-  el.innerHTML=lines.map((w,li)=>
-    w.split('').map(ch=>`<span>${ch}</span>`).join('')+(li<lines.length-1?'<br>':'')
+(function initHeroName() {
+  const lines = ['Manuel', 'Cosovschi'];
+  dom.heroName.setAttribute('aria-label', lines.join(' '));
+  dom.heroName.innerHTML = lines.map((w, li) =>
+    w.split('').map(ch => `<span aria-hidden="true">${ch}</span>`).join('') +
+    (li < lines.length - 1 ? '<br>' : '')
   ).join('');
 })();
 
-/* ── CURSOR GLOW ── */
-const cg=document.getElementById('cglow');
-document.addEventListener('mousemove',e=>{
-  cg.style.left=e.clientX+'px';
-  cg.style.top=e.clientY+'px';
-});
+/* ── CURSOR GLOW — throttled via rAF ── */
+(function initCursorGlow() {
+  let rafId = null;
+  let mx = 0, my = 0;
 
-/* ── CARD TILT ── */
-document.querySelectorAll('.pcard').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-.5;
-    const y=(e.clientY-r.top)/r.height-.5;
-    card.style.transform=`perspective(600px) rotateY(${x*12}deg) rotateX(${-y*10}deg) translateY(-3px)`;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+    if (!rafId) {
+      rafId = requestAnimationFrame(() => {
+        dom.cglow.style.left = mx + 'px';
+        dom.cglow.style.top  = my + 'px';
+        rafId = null;
+      });
+    }
   });
-  card.addEventListener('mouseleave',()=>{
-    card.style.transform='perspective(600px) rotateY(0) rotateX(0) translateY(0)';
-    card.style.transition='transform .4s var(--e)';
-    setTimeout(()=>card.style.transition='',400);
-  });
-});
 
-/* ── STATE ── */
-let cur=0,tLeft=180,tRun=false,tInt=null;
-const TOTAL=180,LBLS=['Quién soy','Lo que construí','Por qué NX'];
+  document.addEventListener('mouseleave', () => { dom.cglow.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { dom.cglow.style.opacity = '1'; });
+})();
+
+/* ── CARD TILT — throttled via rAF, with touch support ── */
+(function initCardTilt() {
+  document.querySelectorAll('.pcard').forEach(card => {
+    let rafId = null;
+
+    function applyTilt(cx, cy) {
+      const r = card.getBoundingClientRect();
+      const x = (cx - r.left) / r.width  - 0.5;
+      const y = (cy - r.top)  / r.height - 0.5;
+      card.style.transition = '';
+      card.style.transform = `perspective(600px) rotateY(${x * TILT_X}deg) rotateX(${-y * TILT_Y}deg) translateY(-3px)`;
+    }
+
+    function resetTilt() {
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      card.style.transition = 'transform .4s var(--e)';
+      card.style.transform  = 'perspective(600px) rotateY(0) rotateX(0) translateY(0)';
+    }
+
+    card.addEventListener('mousemove', e => {
+      if (!rafId) {
+        rafId = requestAnimationFrame(() => { applyTilt(e.clientX, e.clientY); rafId = null; });
+      }
+    });
+    card.addEventListener('mouseleave', resetTilt);
+
+    // Touch support
+    card.addEventListener('touchmove', e => {
+      const t = e.touches[0];
+      if (!rafId) {
+        rafId = requestAnimationFrame(() => { applyTilt(t.clientX, t.clientY); rafId = null; });
+      }
+    }, { passive: true });
+    card.addEventListener('touchend', resetTilt, { passive: true });
+  });
+})();
 
 /* ── NAV ── */
-function go(i){
-  if(i===cur)return;
-  const p=document.getElementById('screen-'+cur);
-  p.classList.remove('active');p.classList.add('exit');
-  setTimeout(()=>p.classList.remove('exit'),450);
-  cur=i;
-  document.getElementById('screen-'+cur).classList.add('active');
+function go(i) {
+  if (i === state.cur) return;
+
+  const prev = dom.screens[state.cur];
+  clearTimeout(prev._exitTimer);
+  prev.classList.remove('active');
+  prev.classList.add('exit');
+  prev._exitTimer = setTimeout(() => prev.classList.remove('exit'), EXIT_DURATION);
+
+  state.cur = i;
+  dom.screens[state.cur].classList.add('active');
   updateNav();
 }
-function updateNav(){
-  document.getElementById('sLbl').textContent=LBLS[cur];
-  [0,1,2].forEach(i=>{
-    const d=document.getElementById('d'+i);
-    d.className='dot'+(i===cur?' on':i<cur?' dn':'');
-    d.style.width=i===cur?'30px':'18px';
+
+function updateNav() {
+  dom.sLbl.textContent = LBLS[state.cur];
+  dom.dots.forEach((d, i) => {
+    const active = i === state.cur;
+    const done   = i < state.cur;
+    d.className        = 'dot' + (active ? ' on' : done ? ' dn' : '');
+    d.style.width      = active ? '30px' : '18px';
+    d.setAttribute('aria-selected', String(active));
   });
 }
 
 /* ── TIMER ── */
-function toggleTimer(){
-  if(tRun){
-    clearInterval(tInt);tRun=false;
-    document.getElementById('tBtn').textContent='Reanudar';
-    document.getElementById('tBtn').classList.remove('on');
-  }else{
-    tRun=true;
-    document.getElementById('tBtn').textContent='Pausar';
-    document.getElementById('tBtn').classList.add('on');
-    tInt=setInterval(tick,1000);
-  }
+const RING_TOTAL = RING_C; // alias for clarity
+
+function updateTimerDisplay() {
+  const m    = Math.floor(state.tLeft / 60);
+  const s    = state.tLeft % 60;
+  const warn = state.tLeft <= 30;
+
+  dom.tNum.textContent             = m + ':' + String(s).padStart(2, '0');
+  dom.tNum.className               = 'tnum' + (warn ? ' w' : '');
+  dom.tRing.className              = 'tring' + (warn ? ' w' : '');
+  dom.tPr.style.strokeDashoffset   = RING_C * (1 - state.tLeft / TOTAL);
+  dom.tFill.style.transform        = `scaleX(${state.tLeft / TOTAL})`;
+  dom.tFill.className              = 'tbar-fill' + (warn ? ' w' : '');
 }
-function tick(){
-  if(tLeft<=0){
-    clearInterval(tInt);tRun=false;
-    document.getElementById('tBtn').textContent='Fin';
-    document.getElementById('tBtn').classList.remove('on');
+
+function tick() {
+  if (state.tLeft <= 0) {
+    clearInterval(state.tInt);
+    state.tRun = false;
+    dom.tBtn.textContent = 'Fin';
+    dom.tBtn.setAttribute('aria-label', 'Tiempo terminado');
+    dom.tBtn.classList.remove('on');
     return;
   }
-  tLeft--;
-  const m=Math.floor(tLeft/60),s=tLeft%60;
-  document.getElementById('tNum').textContent=m+':'+String(s).padStart(2,'0');
-  const w=tLeft<=30;
-  document.getElementById('tNum').className='tnum'+(w?' w':'');
-  document.getElementById('tRing').className='tring'+(w?' w':'');
-  const C=2*Math.PI*12;
-  document.getElementById('tPr').style.strokeDashoffset=C*(1-tLeft/TOTAL);
-  // progress bar
-  const fill=document.getElementById('tFill');
-  fill.style.transform=`scaleX(${tLeft/TOTAL})`;
-  fill.className='tbar-fill'+(w?' w':'');
+  state.tLeft--;
+  updateTimerDisplay();
 }
-(()=>{
-  const C=2*Math.PI*12;
-  document.getElementById('tPr').style.strokeDasharray=C;
-  document.getElementById('tPr').style.strokeDashoffset=0;
-})();
+
+function toggleTimer() {
+  if (state.tRun) {
+    clearInterval(state.tInt);
+    state.tRun = false;
+    dom.tBtn.textContent = 'Reanudar';
+    dom.tBtn.setAttribute('aria-label', 'Reanudar temporizador');
+    dom.tBtn.classList.remove('on');
+  } else {
+    state.tRun = true;
+    dom.tBtn.textContent = 'Pausar';
+    dom.tBtn.setAttribute('aria-label', 'Pausar temporizador');
+    dom.tBtn.classList.add('on');
+    state.tInt = setInterval(tick, 1000);
+  }
+}
+
+// Initialize ring stroke geometry
+dom.tPr.style.strokeDasharray  = RING_C;
+dom.tPr.style.strokeDashoffset = 0;
+
+// Prevent timer leak on page unload
+window.addEventListener('beforeunload', () => {
+  if (state.tInt) clearInterval(state.tInt);
+});
 
 /* ── PROJECT PICK ── */
-function pick(key,e){
-  // ripple
-  const card=e.currentTarget;
-  const r=card.getBoundingClientRect();
-  const rip=document.createElement('div');
-  rip.className='rip';
-  rip.style.left=(e.clientX-r.left)+'px';
-  rip.style.top=(e.clientY-r.top)+'px';
+function pick(key, cx, cy) {
+  const card = dom.cards[key];
+
+  // Ripple effect — cleaned up via animationend, not setTimeout
+  const r   = card.getBoundingClientRect();
+  const rip = document.createElement('div');
+  rip.className    = 'rip';
+  rip.style.left   = (cx - r.left) + 'px';
+  rip.style.top    = (cy - r.top)  + 'px';
   card.appendChild(rip);
-  setTimeout(()=>rip.remove(),600);
+  rip.addEventListener('animationend', () => rip.remove(), { once: true });
 
-  document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('sel'));
-  const map={canas:'pA',bot:'pB',fitnow:'pC'};
-  document.getElementById(map[key]).classList.add('sel');
+  // Update selected card
+  Object.values(dom.cards).forEach(c => c.classList.remove('sel'));
+  card.classList.add('sel');
 
-  const d=DATA[key];
-  document.getElementById('pContent').innerHTML=
-    `<div class="dsec"><div class="dtag">Qué construí</div>${d.built.map(b=>`<div class="dline">${b}</div>`).join('')}</div>`+
-    `<div class="dsec"><div class="dtag">Tradeoff</div><div class="dline">${d.tradeoff}</div></div>`+
+  // Render detail content
+  const d = DATA[key];
+  dom.pContent.innerHTML =
+    `<div class="dsec"><div class="dtag">Qué construí</div>${d.built.map(b => `<div class="dline">${b}</div>`).join('')}</div>` +
+    `<div class="dsec"><div class="dtag">Tradeoff</div><div class="dline">${d.tradeoff}</div></div>` +
     `<div class="dsec"><div class="dtag">Aprendizaje</div><div class="dline">${d.learning}</div></div>`;
-  document.getElementById('pDetail').classList.add('open');
 
-  // stagger rows
-  setTimeout(()=>{
-    document.querySelectorAll('.dsec').forEach(s=>s.classList.add('vis'));
-  },50);
+  dom.pDetail.classList.add('open');
+
+  // Stagger rows — double rAF ensures DOM has settled after classList change
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      dom.pContent.querySelectorAll('.dsec').forEach(s => s.classList.add('vis'));
+    });
+  });
 }
 
-/* ── MODAL ── */
-function openModal(){document.getElementById('overlay').classList.add('open');}
-function closeModal(){document.getElementById('overlay').classList.remove('open');}
-function closeBg(e){if(e.target===document.getElementById('overlay'))closeModal();}
+/* ── MODAL with focus trap ── */
+const FOCUSABLE_SEL = 'button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])';
+let prevFocus   = null;
+let trapHandler = null;
 
-/* ── CIERRE ── */
-function abrirConv(){
-  const b=document.getElementById('btnConv'),orig=b.innerHTML;
-  b.innerHTML='<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> ¡Listo para conversar!';
-  b.style.background='linear-gradient(135deg,rgba(0,212,255,.22),rgba(0,180,80,.14))';
-  setTimeout(()=>{b.innerHTML=orig;b.style.background='';},2800);
+function openModal() {
+  prevFocus = document.activeElement;
+  dom.overlay.classList.add('open');
+  dom.overlay.removeAttribute('aria-hidden');
+
+  const focusables = () => [...dom.overlay.querySelectorAll(FOCUSABLE_SEL)];
+  const first = focusables()[0];
+  if (first) first.focus();
+
+  trapHandler = e => {
+    if (e.key !== 'Tab') return;
+    const items = focusables();
+    if (!items.length) return;
+    const firstEl = items[0], lastEl = items[items.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === firstEl) { e.preventDefault(); lastEl.focus(); }
+    } else {
+      if (document.activeElement === lastEl)  { e.preventDefault(); firstEl.focus(); }
+    }
+  };
+  dom.overlay.addEventListener('keydown', trapHandler);
 }
 
-/* ── KEYBOARD ── */
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'&&cur<2)go(cur+1);
-  if(e.key==='ArrowLeft'&&cur>0)go(cur-1);
-  if(e.key===' '){e.preventDefault();toggleTimer();}
-  if(e.key==='Escape')closeModal();
+function closeModal() {
+  dom.overlay.classList.remove('open');
+  dom.overlay.setAttribute('aria-hidden', 'true');
+  if (trapHandler) { dom.overlay.removeEventListener('keydown', trapHandler); trapHandler = null; }
+  if (prevFocus)   { prevFocus.focus(); prevFocus = null; }
+}
+
+// Initialize hidden state
+dom.overlay.setAttribute('aria-hidden', 'true');
+
+/* ── CONVERSATION BUTTON ── */
+const CONV_ORIG = dom.btnConv.innerHTML;
+function abrirConv() {
+  dom.btnConv.innerHTML = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> ¡Listo para conversar!';
+  dom.btnConv.style.background = 'linear-gradient(135deg,rgba(0,212,255,.22),rgba(0,180,80,.14))';
+  setTimeout(() => {
+    dom.btnConv.innerHTML = CONV_ORIG;
+    dom.btnConv.style.background = '';
+  }, 2800);
+}
+
+/* ── EVENT LISTENERS ── */
+
+// Navigation
+dom.btnNext0.addEventListener('click', () => go(1));
+dom.btnPrev1.addEventListener('click', () => go(0));
+dom.btnNext1.addEventListener('click', () => go(2));
+dom.btnPrev2.addEventListener('click', () => go(1));
+
+// Nav dots
+dom.dots.forEach((d, i) => {
+  d.addEventListener('click', () => go(i));
+  d.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(i); }
+  });
+});
+
+// Timer
+dom.tBtn.addEventListener('click', toggleTimer);
+
+// Project cards — keyboard + click
+const cardKeys = ['canas', 'bot', 'fitnow'];
+document.querySelectorAll('.pcard').forEach((card, i) => {
+  const key = cardKeys[i];
+  card.addEventListener('click', e => pick(key, e.clientX, e.clientY));
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const r = card.getBoundingClientRect();
+      pick(key, r.left + r.width / 2, r.top + r.height / 2);
+    }
+  });
+});
+
+// Modal
+dom.btnResumen.addEventListener('click', openModal);
+dom.btnCloseModal.addEventListener('click', closeModal);
+dom.overlay.addEventListener('click', e => { if (e.target === dom.overlay) closeModal(); });
+
+// Conversation
+dom.btnConv.addEventListener('click', abrirConv);
+
+// Global keyboard shortcuts
+document.addEventListener('keydown', e => {
+  const modalOpen = dom.overlay.classList.contains('open');
+  if (e.key === 'ArrowRight' && !modalOpen && state.cur < 2) go(state.cur + 1);
+  if (e.key === 'ArrowLeft'  && !modalOpen && state.cur > 0) go(state.cur - 1);
+  if (e.key === ' '          && !modalOpen) { e.preventDefault(); toggleTimer(); }
+  if (e.key === 'Escape'     &&  modalOpen) closeModal();
 });
 </script>
 </body>
